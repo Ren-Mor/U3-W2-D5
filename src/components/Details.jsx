@@ -70,19 +70,41 @@ function Details({ weather }) {
           <h2 className="mb-4 text-white text-stroke">
             Dettagli Meteo per {weather.name}
           </h2>
-          <p className="text-white text-stroke">
-            Temperatura: {weather.main.temp}°C
-          </p>
-          <p className="text-white text-stroke">
-            Meteo: {weather.weather[0].description}
-          </p>
-          <p className="text-white text-stroke">
-            Umidità: {weather.main.humidity}%
-          </p>
-          <p className="text-white text-stroke">
-            Vento: {weather.wind.speed} m/s
-          </p>
-          <Link to="/" className="btn btn-dark mt-3">
+          <div className="row g-3 justify-content-center">
+            <div className="col-12 col-md-6">
+              <div className="card bg-dark text-white">
+                <div className="card-body">
+                  <h5 className="card-title">Temperatura</h5>
+                  <p className="card-text">{weather.main.temp}°C</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="card bg-dark text-white">
+                <div className="card-body">
+                  <h5 className="card-title">Meteo</h5>
+                  <p className="card-text">{weather.weather[0].description}</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="card bg-dark text-white">
+                <div className="card-body">
+                  <h5 className="card-title">Umidità</h5>
+                  <p className="card-text">{weather.main.humidity}%</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-12 col-md-6">
+              <div className="card bg-dark text-white">
+                <div className="card-body">
+                  <h5 className="card-title">Vento</h5>
+                  <p className="card-text">{weather.wind.speed} m/s</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <Link to="/" className="btn btn-dark mt-4">
             Torna alla ricerca
           </Link>
         </div>

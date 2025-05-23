@@ -48,9 +48,7 @@ function Homepage({
             className="col-12 col-sm-10 col-md-8 col-lg-6 text-center"
             style={{ position: "relative" }}
           >
-            <h1 className="mb-3 text-white text-stroke">
-              Che città cerchiamo?
-            </h1>
+            <h1 className="mb-3 text-white text-stroke">Che tempo farà?</h1>
             <div className="input-group mb-2">
               <input
                 type="text"
@@ -111,15 +109,109 @@ function Homepage({
 
         {weather && weather.main && (
           <div style={showDropdown ? { marginTop: 70 } : {}}>
-            <h2 className="fs-4 text-white text-stroke">{weather.name}</h2>
-            <p className="mb-1 text-white text-stroke">
-              Temperatura: {weather.main.temp}°C
-            </p>
-            <p className="mb-1 text-white text-stroke">
-              Meteo: {weather.weather[0].description}
-              {weather.weather[0].main === "Rain" ? " ☔" : ""}
-            </p>
-            <div className="d-flex gap-2 justify-content-center mt-2">
+            <div
+              className="d-flex justify-content-center mb-3"
+              style={{ gap: 12 }}
+            >
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  minWidth: 90,
+                  maxWidth: 110,
+                }}
+              >
+                <div
+                  className="card bg-dark text-white flex-fill w-100"
+                  style={{ minHeight: 48 }}
+                >
+                  <div
+                    className="card-body text-center p-2"
+                    style={{ padding: "0.25rem" }}
+                  >
+                    <h5
+                      className="card-title mb-1"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      Città
+                    </h5>
+                    <p
+                      className="card-text"
+                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
+                    >
+                      {weather.name}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  minWidth: 110,
+                  maxWidth: 140,
+                }}
+              >
+                <div
+                  className="card bg-dark text-white flex-fill w-100"
+                  style={{ minHeight: 48 }}
+                >
+                  <div
+                    className="card-body text-center p-2"
+                    style={{ padding: "0.25rem" }}
+                  >
+                    <h5
+                      className="card-title mb-1"
+                      style={{
+                        fontSize: "0.9rem",
+                        whiteSpace: "nowrap",
+                        textAlign: "center",
+                        width: "100%",
+                        margin: "0 auto",
+                      }}
+                    >
+                      Temperatura
+                    </h5>
+                    <p
+                      className="card-text"
+                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
+                    >
+                      {weather.main.temp}°C
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{
+                  minWidth: 90,
+                  maxWidth: 110,
+                }}
+              >
+                <div
+                  className="card bg-dark text-white flex-fill w-100"
+                  style={{ minHeight: 48 }}
+                >
+                  <div
+                    className="card-body text-center p-2"
+                    style={{ padding: "0.25rem" }}
+                  >
+                    <h5
+                      className="card-title mb-1"
+                      style={{ fontSize: "0.9rem" }}
+                    >
+                      Meteo
+                    </h5>
+                    <p
+                      className="card-text"
+                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
+                    >
+                      {weather.weather[0].description}
+                      {weather.weather[0].main === "Rain" ? " ☔" : ""}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-flex gap-2 justify-content-center mt-2 mb-3">
               <Link to="/details">
                 <button className="btn btn-dark btn-sm">Vedi dettagli</button>
               </Link>
@@ -147,18 +239,22 @@ function Homepage({
             <h3 className="fs-3 m-3 text-white text-stroke">
               Prossimi giorni:
             </h3>
-            <ul className="mb-2">
+            <div className="row g-3 mb-2">
               {forecast.list.slice(0, 5).map((item, idx) => (
-                <li
-                  key={idx}
-                  style={{ fontSize: "0.95em" }}
-                  className="text-white text-stroke"
-                >
-                  {item.dt_txt}: {item.main.temp}°C,{" "}
-                  {item.weather[0].description}
-                </li>
+                <div className="col-12 col-md-6 col-lg-4" key={idx}>
+                  <div className="card bg-dark text-white h-100">
+                    <div className="card-body">
+                      <h5 className="card-title" style={{ fontSize: "1em" }}>
+                        {item.dt_txt}
+                      </h5>
+                      <p className="card-text" style={{ fontSize: "0.9rem" }}>
+                        {item.main.temp}°C, {item.weather[0].description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>
