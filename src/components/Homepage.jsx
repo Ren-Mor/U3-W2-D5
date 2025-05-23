@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
+import Slideshow from "./Slideshow"; // <-- importa lo slideshow
 
 function Homepage({
   city,
@@ -17,10 +18,27 @@ function Homepage({
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
-    <div className="d-flex flex-column min-vh-100">
+    <div
+      className="d-flex flex-column min-vh-100"
+      style={{ position: "relative", overflow: "hidden" }}
+    >
+      <Slideshow />
+      {/* Overlay per rendere leggibile il contenuto */}
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          background: "rgba(0,0,0,0.35)",
+          zIndex: 1,
+          pointerEvents: "none",
+        }}
+      />
       <div
         className="container d-flex flex-column align-items-center flex-grow-1"
-        style={{ padding: 10 }}
+        style={{ padding: 10, position: "relative", zIndex: 2 }}
       >
         <div
           className="row w-100 justify-content-center"
