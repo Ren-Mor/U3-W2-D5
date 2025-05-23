@@ -5,3 +5,8 @@ footer {
   width: 100vw;
   z-index: 3;
 }
+
+.text-stroke {
+  text-shadow: -1px -1px 0 #222, 1px -1px 0 #222, -1px 1px 0 #222,
+    1px 1px 0 #222;
+}

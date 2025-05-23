@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import roma from "../assets/Rome.jpg";
 import tokyo from "../assets/Tokyo.jpg";
 import newyork from "../assets/New York.jpg";
@@ -21,15 +21,25 @@ const images = [
   moscow,
 ];
 
-function Slideshow({ interval = 5000 }) {
+function Slideshow({ interval = 6000, fadeDuration = 300 }) {
   const [index, setIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  const timeoutRef = useRef();
 
   useEffect(() => {
+    setFade(true);
     const id = setInterval(() => {
-      setIndex((prev) => (prev + 1) % images.length);
+      setFade(false);
+      timeoutRef.current = setTimeout(() => {
+        setIndex((prev) => (prev + 1) % images.length);
+        setFade(true);
+      }, fadeDuration);
     }, interval);
-    return () => clearInterval(id);
-  }, [interval]);
+    return () => {
+      clearInterval(id);
+      clearTimeout(timeoutRef.current);
+    };
+  }, [interval, fadeDuration]);
 
   return (
     <img
@@ -43,7 +53,8 @@ function Slideshow({ interval = 5000 }) {
         top: 0,
         left: 0,
         zIndex: 0,
-        transition: "opacity 0.7s",
+        transition: `opacity ${fadeDuration}ms`,
+        opacity: fade ? 1 : 0,
         pointerEvents: "none",
         userSelect: "none",
       }}

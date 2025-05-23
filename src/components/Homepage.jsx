@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
-import Slideshow from "./Slideshow"; // <-- importa lo slideshow
+import Slideshow from "./Slideshow";
 
 function Homepage({
   city,
@@ -23,7 +23,7 @@ function Homepage({
       style={{ position: "relative", overflow: "hidden" }}
     >
       <Slideshow />
-      {/* Overlay per rendere leggibile il contenuto */}
+
       <div
         style={{
           position: "fixed",
@@ -31,14 +31,14 @@ function Homepage({
           left: 0,
           width: "100vw",
           height: "100vh",
-          background: "rgba(0,0,0,0.35)",
+          background: "rgba(25, 25, 25, 0.3)",
           zIndex: 1,
           pointerEvents: "none",
         }}
       />
       <div
         className="container d-flex flex-column align-items-center flex-grow-1"
-        style={{ padding: 10, position: "relative", zIndex: 2 }}
+        style={{ padding: 10, position: "relative", zIndex: 5 }}
       >
         <div
           className="row w-100 justify-content-center"
@@ -48,7 +48,9 @@ function Homepage({
             className="col-12 col-sm-10 col-md-8 col-lg-6 text-center"
             style={{ position: "relative" }}
           >
-            <h1 className="mb-3">Che città cerchiamo?</h1>
+            <h1 className="mb-3 text-white text-stroke">
+              Che città cerchiamo?
+            </h1>
             <div className="input-group mb-2">
               <input
                 type="text"
@@ -66,7 +68,7 @@ function Homepage({
                 autoComplete="off"
               />
               <button
-                className="btn btn-primary rounded-end-pill"
+                className="btn btn-dark rounded-end-pill"
                 onClick={onSearch}
               >
                 Cerca
@@ -109,45 +111,49 @@ function Homepage({
 
         {weather && weather.main && (
           <div style={showDropdown ? { marginTop: 70 } : {}}>
-            <h2 className="fs-4">{weather.name}</h2>
-            <p className="mb-1">Temperatura: {weather.main.temp}°C</p>
-            <p className="mb-1">
+            <h2 className="fs-4 text-white text-stroke">{weather.name}</h2>
+            <p className="mb-1 text-white text-stroke">
+              Temperatura: {weather.main.temp}°C
+            </p>
+            <p className="mb-1 text-white text-stroke">
               Meteo: {weather.weather[0].description}
               {weather.weather[0].main === "Rain" ? " ☔" : ""}
             </p>
-            <Link to="/details">
-              <button className="btn btn-secondary btn-sm me-2">
-                Vedi dettagli
-              </button>
-            </Link>
-          </div>
-        )}
-        {(weather && weather.main) || (history && history.length > 0) ? (
-          <div className="mt-2 d-flex gap-2 justify-content-center">
-            {weather && weather.main && (
+            <div className="d-flex gap-2 justify-content-center mt-2">
+              <Link to="/details">
+                <button className="btn btn-dark btn-sm">Vedi dettagli</button>
+              </Link>
               <button
-                className="btn btn-outline-danger btn-sm"
+                className="btn btn-dark btn-sm"
                 onClick={onClearSearch}
+                style={{ display: weather && weather.main ? "block" : "none" }}
               >
                 Pulisci ricerca
               </button>
-            )}
-            {history && history.length > 0 && (
               <button
-                className="btn btn-outline-warning btn-sm"
+                className="btn btn-dark btn-sm"
                 onClick={onClearHistory}
+                style={{
+                  display: history && history.length > 0 ? "block" : "none",
+                }}
               >
                 Pulisci cronologia
               </button>
-            )}
+            </div>
           </div>
-        ) : null}
+        )}
         {forecast && forecast.list && (
           <div>
-            <h3 className="fs-5">Prossimi giorni:</h3>
+            <h3 className="fs-3 m-3 text-white text-stroke">
+              Prossimi giorni:
+            </h3>
             <ul className="mb-2">
               {forecast.list.slice(0, 5).map((item, idx) => (
-                <li key={idx} style={{ fontSize: "0.95em" }}>
+                <li
+                  key={idx}
+                  style={{ fontSize: "0.95em" }}
+                  className="text-white text-stroke"
+                >
                   {item.dt_txt}: {item.main.temp}°C,{" "}
                   {item.weather[0].description}
                 </li>
