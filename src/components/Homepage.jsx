@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "./Footer";
 
@@ -13,6 +14,8 @@ function Homepage({
   onClearSearch,
   onClearHistory,
 }) {
+  const [showDropdown, setShowDropdown] = useState(false);
+
   return (
     <div className="d-flex flex-column min-vh-100">
       <div
@@ -23,7 +26,10 @@ function Homepage({
           className="row w-100 justify-content-center"
           style={{ marginTop: "20px" }}
         >
-          <div className="col-12 col-sm-10 col-md-8 col-lg-6 text-center">
+          <div
+            className="col-12 col-sm-10 col-md-8 col-lg-6 text-center"
+            style={{ position: "relative" }}
+          >
             <h1 className="mb-3">Che città cerchiamo?</h1>
             <div className="input-group mb-2">
               <input
@@ -32,11 +38,14 @@ function Homepage({
                 placeholder="Cerca una città"
                 value={city}
                 onChange={onCityChange}
+                onFocus={() => setShowDropdown(true)}
+                onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     onSearch();
                   }
                 }}
+                autoComplete="off"
               />
               <button
                 className="btn btn-primary rounded-end-pill"
@@ -45,45 +54,43 @@ function Homepage({
                 Cerca
               </button>
             </div>
-          </div>
-        </div>
-
-        {/* Cronologia ricerche */}
-        {history && history.length > 0 && (
-          <div
-            className="row w-100 justify-content-center"
-            style={{ marginTop: 10 }}
-          >
-            <div className="col-12 col-sm-10 col-md-8 col-lg-6 mx-auto">
-              <h3 className="fs-5">Ricerche recenti:</h3>
-              <ul className="mb-2">
+            {history && history.length > 0 && showDropdown && (
+              <ul
+                className="list-group position-absolute"
+                style={{
+                  zIndex: 10,
+                  top: "100%",
+                  left: 0,
+                  width: "50%",
+                  maxHeight: 200,
+                  overflowY: "auto",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                  margin: 0,
+                  borderTopLeftRadius: 0,
+                  borderTopRightRadius: 0,
+                }}
+              >
                 {history.map((item, idx) => (
-                  <li key={idx} style={{ display: "inline", marginRight: 8 }}>
-                    <button
-                      style={{
-                        background: "none",
-                        border: "none",
-                        color: "blue",
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                        padding: 0,
-                      }}
-                      onClick={() => {
-                        setCity(item);
-                        setTimeout(() => onSearchHistory(), 0);
-                      }}
-                    >
-                      {item}
-                    </button>
+                  <li
+                    key={idx}
+                    className="list-group-item list-group-item-action"
+                    style={{ cursor: "pointer", textAlign: "left" }}
+                    onMouseDown={() => {
+                      setCity(item);
+                      setTimeout(() => onSearchHistory(), 0);
+                      setShowDropdown(false);
+                    }}
+                  >
+                    {item}
                   </li>
                 ))}
               </ul>
-            </div>
+            )}
           </div>
-        )}
+        </div>
 
         {weather && weather.main && (
-          <div>
+          <div style={showDropdown ? { marginTop: 70 } : {}}>
             <h2 className="fs-4">{weather.name}</h2>
             <p className="mb-1">Temperatura: {weather.main.temp}°C</p>
             <p className="mb-1">
@@ -97,22 +104,26 @@ function Homepage({
             </Link>
           </div>
         )}
-        {weather && weather.main && (
+        {(weather && weather.main) || (history && history.length > 0) ? (
           <div className="mt-2 d-flex gap-2 justify-content-center">
-            <button
-              className="btn btn-outline-danger btn-sm"
-              onClick={onClearSearch}
-            >
-              Pulisci ricerca
-            </button>
-            <button
-              className="btn btn-outline-warning btn-sm"
-              onClick={onClearHistory}
-            >
-              Pulisci cronologia
-            </button>
+            {weather && weather.main && (
+              <button
+                className="btn btn-outline-danger btn-sm"
+                onClick={onClearSearch}
+              >
+                Pulisci ricerca
+              </button>
+            )}
+            {history && history.length > 0 && (
+              <button
+                className="btn btn-outline-warning btn-sm"
+                onClick={onClearHistory}
+              >
+                Pulisci cronologia
+              </button>
+            )}
           </div>
-        )}
+        ) : null}
         {forecast && forecast.list && (
           <div>
             <h3 className="fs-5">Prossimi giorni:</h3>

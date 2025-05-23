@@ -29,7 +29,7 @@ function App() {
     setWeather(dataWeather);
     setForecast(dataForecast);
 
-    // Aggiorno la cronologia se la città non è già presente
+    // Aggiornamento cronologia
     if (city && !history.includes(city)) {
       setHistory([city, ...history].slice(0, 10)); // Limito a 10 ricerche recenti
     }
