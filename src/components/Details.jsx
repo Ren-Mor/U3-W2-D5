@@ -54,7 +54,7 @@ function Details({ weather }) {
           left: 0,
           width: "100vw",
           height: "100vh",
-          background: "rgba(25, 25, 25, 0.3)", // uniforma qui
+          background: "rgba(25, 25, 25, 0.3)",
           zIndex: 1,
           pointerEvents: "none",
         }}
