@@ -8,13 +8,13 @@ function Homepage({
   onCityChange,
   onSearch,
   weather,
-  forecast,
   history,
   setCity,
   onSearchHistory,
   onClearSearch,
   onClearHistory,
 }) {
+  // Gestisco la visibilità del dropdown con la cronologia
   const [showDropdown, setShowDropdown] = useState(false);
 
   return (
@@ -22,8 +22,10 @@ function Homepage({
       className="d-flex flex-column min-vh-100"
       style={{ position: "relative", overflow: "hidden" }}
     >
+      {/* Aggiungo lo slideshow di sfondo */}
       <Slideshow />
 
+      {/* Creo un overlay scuro per migliorare la leggibilità */}
       <div
         style={{
           position: "fixed",
@@ -49,6 +51,7 @@ function Homepage({
             style={{ position: "relative" }}
           >
             <h1 className="mb-3 text-white text-stroke">Che tempo farà?</h1>
+            {/* Campo di ricerca con dropdown per ricerche recenti */}
             <div className="input-group mb-2">
               <input
                 type="text"
@@ -59,6 +62,7 @@ function Homepage({
                 onFocus={() => setShowDropdown(true)}
                 onBlur={() => setTimeout(() => setShowDropdown(false), 150)}
                 onKeyDown={(e) => {
+                  // Faccio funzionare Enter
                   if (e.key === "Enter") {
                     onSearch();
                   }
@@ -72,6 +76,7 @@ function Homepage({
                 Cerca
               </button>
             </div>
+            {/* Menu a tendina per cronologia */}
             {history && history.length > 0 && showDropdown && (
               <ul
                 className="list-group position-absolute"
@@ -94,6 +99,7 @@ function Homepage({
                     className="list-group-item list-group-item-action"
                     style={{ cursor: "pointer", textAlign: "left" }}
                     onMouseDown={() => {
+                      // Ricerca della città selezionata. Il droppdown si chiude
                       setCity(item);
                       setTimeout(() => onSearchHistory(), 0);
                       setShowDropdown(false);
@@ -107,156 +113,79 @@ function Homepage({
           </div>
         </div>
 
+        {/* Eventuale visualizzazione della cronologia */}
         {weather && weather.main && (
-          <div style={showDropdown ? { marginTop: 70 } : {}}>
+          <div style={showDropdown ? { marginTop: 120 } : { marginTop: 60 }}>
             <div
               className="d-flex justify-content-center mb-3"
-              style={{ gap: 12 }}
+              style={{ gap: 13 }}
             >
+              {/* Card con informazioni sulla città */}
               <div
-                className="d-flex align-items-center justify-content-center"
-                style={{
-                  minWidth: 90,
-                  maxWidth: 110,
-                }}
+                className="col-12 col-sm-6 col-md-3"
+                style={{ minWidth: 150, maxWidth: 190 }}
               >
-                <div
-                  className="card bg-dark text-white flex-fill w-100"
-                  style={{ minHeight: 48 }}
-                >
-                  <div
-                    className="card-body text-center p-2"
-                    style={{ padding: "0.25rem" }}
-                  >
-                    <h5
-                      className="card-title mb-1"
-                      style={{ fontSize: "0.9rem" }}
-                    >
-                      Città
-                    </h5>
-                    <p
-                      className="card-text"
-                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
-                    >
-                      {weather.name}
-                    </p>
+                <div className="card bg-dark text-white h-100 text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Città</h5>
+                    <p className="card-text">{weather.name}</p>
                   </div>
                 </div>
               </div>
+              {/* Card temperatura */}
               <div
-                className="d-flex align-items-center justify-content-center"
-                style={{
-                  minWidth: 110,
-                  maxWidth: 140,
-                }}
+                className="col-12 col-sm-6 col-md-3"
+                style={{ minWidth: 150, maxWidth: 190 }}
               >
-                <div
-                  className="card bg-dark text-white flex-fill w-100"
-                  style={{ minHeight: 48 }}
-                >
-                  <div
-                    className="card-body text-center p-2"
-                    style={{ padding: "0.25rem" }}
-                  >
-                    <h5
-                      className="card-title mb-1"
-                      style={{
-                        fontSize: "0.9rem",
-                        whiteSpace: "nowrap",
-                        textAlign: "center",
-                        width: "100%",
-                        margin: "0 auto",
-                      }}
-                    >
-                      Temperatura
-                    </h5>
-                    <p
-                      className="card-text"
-                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
-                    >
-                      {weather.main.temp}°C
-                    </p>
+                <div className="card bg-dark text-white h-100 text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Temperatura</h5>
+                    <p className="card-text">{weather.main.temp}°C</p>
                   </div>
                 </div>
               </div>
+              {/* Card meteo */}
               <div
-                className="d-flex align-items-center justify-content-center"
-                style={{
-                  minWidth: 90,
-                  maxWidth: 110,
-                }}
+                className="col-12 col-sm-6 col-md-3"
+                style={{ minWidth: 150, maxWidth: 190 }}
               >
-                <div
-                  className="card bg-dark text-white flex-fill w-100"
-                  style={{ minHeight: 48 }}
-                >
-                  <div
-                    className="card-body text-center p-2"
-                    style={{ padding: "0.25rem" }}
-                  >
-                    <h5
-                      className="card-title mb-1"
-                      style={{ fontSize: "0.9rem" }}
-                    >
-                      Meteo
-                    </h5>
-                    <p
-                      className="card-text"
-                      style={{ fontSize: "0.9rem", marginBottom: 0 }}
-                    >
+                <div className="card bg-dark text-white h-100 text-center">
+                  <div className="card-body">
+                    <h5 className="card-title">Meteo</h5>
+                    <p className="card-text">
                       {weather.weather[0].description}
+                      {/* Icona ombrello se piove */}
                       {weather.weather[0].main === "Rain" ? " ☔" : ""}
                     </p>
                   </div>
                 </div>
               </div>
             </div>
-            <div className="d-flex gap-2 justify-content-center mt-2 mb-3">
+          </div>
+        )}
+
+        {/* Bottoni */}
+        <div className="d-flex justify-content-center mt-5 mb-3">
+          <div className="d-flex flex-wrap gap-2 justify-content-center">
+            {weather && weather.main && (
               <Link to="/details">
-                <button className="btn btn-dark btn-sm">Vedi dettagli</button>
+                <button className="btn btn-dark btn-sm">Mostra dettagli</button>
               </Link>
-              <button
-                className="btn btn-dark btn-sm"
-                onClick={onClearSearch}
-                style={{ display: weather && weather.main ? "block" : "none" }}
-              >
+            )}
+
+            {weather && weather.main && (
+              <button className="btn btn-dark btn-sm" onClick={onClearSearch}>
                 Pulisci ricerca
               </button>
-              <button
-                className="btn btn-dark btn-sm"
-                onClick={onClearHistory}
-                style={{
-                  display: history && history.length > 0 ? "block" : "none",
-                }}
-              >
+            )}
+
+            {history && history.length > 0 && (
+              <button className="btn btn-dark btn-sm" onClick={onClearHistory}>
                 Pulisci cronologia
               </button>
-            </div>
+            )}
           </div>
-        )}
-        {forecast && forecast.list && (
-          <div>
-            <h3 className="fs-3 m-3 text-white text-stroke">
-              Prossimi giorni:
-            </h3>
-            <div className="row g-3 mb-2">
-              {forecast.list.slice(0, 5).map((item, idx) => (
-                <div className="col-12 col-md-6 col-lg-4" key={idx}>
-                  <div className="card bg-dark text-white h-100">
-                    <div className="card-body">
-                      <h5 className="card-title" style={{ fontSize: "1em" }}>
-                        {item.dt_txt}
-                      </h5>
-                      <p className="card-text" style={{ fontSize: "0.9rem" }}>
-                        {item.main.temp}°C, {item.weather[0].description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        </div>
       </div>
       <Footer />
     </div>

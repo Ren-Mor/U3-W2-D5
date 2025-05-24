@@ -9,6 +9,7 @@ import sydney from "../assets/Sydney.jpg";
 import london from "../assets/London.jpg";
 import moscow from "../assets/Moscow.jpg";
 
+// Array di immagini in assets
 const images = [
   roma,
   tokyo,
@@ -22,19 +23,27 @@ const images = [
 ];
 
 function Slideshow({ interval = 6000, fadeDuration = 300 }) {
+  // Gestisco quale immagine mostrare e l'effetto di dissolvenza
   const [index, setIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const timeoutRef = useRef();
 
   useEffect(() => {
+    // Imposto l'immagine come visibile all'inizio
     setFade(true);
+
+    // Intervallo per cambiare l'immagine
     const id = setInterval(() => {
+      // Nascondo l'immagine corrente
       setFade(false);
+
+      // Breve ritardo e cambio immagine
       timeoutRef.current = setTimeout(() => {
         setIndex((prev) => (prev + 1) % images.length);
         setFade(true);
       }, fadeDuration);
     }, interval);
+
     return () => {
       clearInterval(id);
       clearTimeout(timeoutRef.current);
