@@ -1,61 +1,58 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Homepage from "./components/Homepage";
 import Details from "./components/Details";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-
+// In questa pagina ho utilizzato gli hooks
 function App() {
-  // Creo gli stati per gestire i dati dell'applicazione
   const [city, setCity] = useState("");
   const [weather, setWeather] = useState(null);
   const [forecast, setForecast] = useState(null);
-  const [history, setHistory] = useState([]);
 
-  // Gestisco il cambiamento dell'input per la città
-  const handleInputChange = (e) => {
+  function handleInputChange(e) {
     setCity(e.target.value);
-  };
+  }
 
-  // Recupero i dati meteo dalla API
-  const fetchWeather = async () => {
-    const apiKey = "796d0f8738a4dc6ad5ccd3986a4dcc47";
-    const urlWeather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=it`;
-    const urlForecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric&lang=it`;
-
-    // Faccio le richieste in parallelo
-    const [resWeather, resForecast] = await Promise.all([
-      fetch(urlWeather),
-      fetch(urlForecast),
-    ]);
-    const dataWeather = await resWeather.json();
-    const dataForecast = await resForecast.json();
-
-    // Aggiorno gli stati con i dati ricevuti
-    setWeather(dataWeather);
-    setForecast(dataForecast);
-
-    // Aggiungo la città alla cronologia se non vi è già
-    if (city && !history.includes(city)) {
-      setHistory([city, ...history].slice(0, 10)); // Limito a 10 ricerche recenti
+  async function cercaMeteo() {
+    if (city === "") {
+      return;
     }
-  };
 
-  // Pulizia dati della ricerca
-  const handleClearSearch = () => {
+    const apiKey = "796d0f8738a4dc6ad5ccd3986a4dcc47";
+
+    const urlMeteo =
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      city +
+      "&appid=" +
+      apiKey +
+      "&units=metric&lang=it";
+
+    const urlPrevisioni =
+      "https://api.openweathermap.org/data/2.5/forecast?q=" +
+      city +
+      "&appid=" +
+      apiKey +
+      "&units=metric&lang=it";
+
+    const rispostaMeteo = await fetch(urlMeteo);
+    const rispostaPrevisioni = await fetch(urlPrevisioni);
+
+    const datiMeteo = await rispostaMeteo.json();
+    const datiPrevisioni = await rispostaPrevisioni.json();
+
+    setWeather(datiMeteo);
+    setForecast(datiPrevisioni);
+  }
+
+  function pulisciRicerca() {
     setCity("");
     setWeather(null);
     setForecast(null);
-  };
-
-  // Cancello la cronologia delle ricerche
-  const handleClearHistory = () => {
-    setHistory([]);
-  };
+  }
 
   return (
-    // Configuro le routes dell'applicazione
-    <Router>
+    <BrowserRouter>
       <Routes>
         <Route
           path="/"
@@ -63,14 +60,11 @@ function App() {
             <Homepage
               city={city}
               onCityChange={handleInputChange}
-              onSearch={fetchWeather}
+              onSearch={cercaMeteo}
               weather={weather}
               forecast={forecast}
-              history={history}
               setCity={setCity}
-              onSearchHistory={fetchWeather}
-              onClearSearch={handleClearSearch}
-              onClearHistory={handleClearHistory}
+              onClearSearch={pulisciRicerca}
             />
           }
         />
@@ -79,7 +73,7 @@ function App() {
           element={<Details weather={weather} forecast={forecast} />}
         />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
